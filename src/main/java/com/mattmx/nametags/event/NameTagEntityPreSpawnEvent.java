@@ -9,11 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called <b>before attempting to spawn</b> the Entity in the world.
- * <p>
- * This event can be used to modify the entity's visibility for vanished players
- * by updating the {@link me.tofaa.entitylib.wrapper.WrapperEntity} using {@link me.tofaa.entitylib.wrapper.WrapperEntity#addViewerRule(ViewerRule)} or {@link me.tofaa.entitylib.wrapper.WrapperEntity#addViewer(User)}.
- * </p>
+ * Called before attempting to spawn the Entity in the world.
  * <p>
  * <b>You should not call</b> {@link com.mattmx.nametags.entity.NameTagEntity#sendPassengerPacket(Player)} or {@link NameTagEntity#destroy()}!
  * </p>
