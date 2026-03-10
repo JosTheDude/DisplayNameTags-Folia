@@ -1,8 +1,6 @@
 package com.mattmx.nametags.event;
 
-import com.github.retrooper.packetevents.protocol.player.User;
 import com.mattmx.nametags.entity.NameTagEntity;
-import me.tofaa.entitylib.ve.ViewerRule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
