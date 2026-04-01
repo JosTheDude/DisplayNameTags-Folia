@@ -9,6 +9,7 @@ import com.mattmx.nametags.entity.NameTagEntityManager;
 import com.mattmx.nametags.hook.NeznamyTABHook;
 import com.mattmx.nametags.hook.SkinRestorerHook;
 import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
+import com.mattmx.nametags.utils.test.TestPlaceholderExpansion;
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
 import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
@@ -85,6 +86,10 @@ public class NameTags extends JavaPlugin {
         FoliaScheduler.getGlobalRegionScheduler().runDelayed(this, (task) -> DependencyVersionChecker.checkPacketEventsVersion(), 10L);
 
         Objects.requireNonNull(Bukkit.getPluginCommand("nametags")).setExecutor(new NameTagsCommand(this));
+
+        if (false) {
+            new TestPlaceholderExpansion().register();
+        }
     }
 
     @Override
