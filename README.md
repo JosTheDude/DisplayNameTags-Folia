@@ -7,6 +7,24 @@
 Replace your players' boring old name tags with customizable ones based on 
 text displays! (Thanks to [EntityLib](https://github.com/Tofaa2/EntityLib)!)
 
+## About this fork
+
+This fork keeps NameTags running on Minecraft 26.2 (Paper/Purpur) for the OvergrowthSMP network.
+
+All credit for the plugin goes to the original authors:
+
+- **[mattmx](https://github.com/mattmx)**, who created Display Name Tags
+- **[JosTheDude](https://github.com/JosTheDude)**, whose [DisplayNameTags-Folia](https://github.com/JosTheDude/DisplayNameTags-Folia) this fork is based on
+
+Changes in this fork:
+
+- **26.2 support:** a fallback entity ID provider for servers where EntityLib cannot find the server's entity ID counter.
+- **Name tags after teleport, world change, respawn and rejoin:** tags are re-sent to nearby players shortly after these events, so names no longer go missing.
+- **Relog fix:** a stale tag left from a previous session is replaced instead of reused, and leaving the server no longer throws "No cached NameTag" errors.
+- **Less placeholder work:** when a group tag replaces the default text, the default text is no longer parsed on every refresh.
+
+Licensed under GPL-3.0, the same as the original.
+
 
 <p align="center">
     <img width="650px" src=nametags.gif />

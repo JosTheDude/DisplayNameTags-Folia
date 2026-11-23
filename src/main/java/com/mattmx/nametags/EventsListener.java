@@ -3,7 +3,9 @@ package com.mattmx.nametags;
 import com.mattmx.nametags.entity.NameTagEntity;
 import com.mattmx.nametags.entity.trait.SneakTrait;
 import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
+import com.github.retrooper.packetevents.PacketEvents;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,6 +31,39 @@ public class EventsListener implements Listener {
                 .getOrCreateNameTagEntity(event.getPlayer())
                 .updateVisibility();
         }, () -> {});
+        scheduleResync(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onPlayerTeleport(@NotNull PlayerTeleportEvent event) {
+        scheduleResync(event.getPlayer());
+    }
+
+    private void scheduleResync(@NotNull Player player) {
+        for (long delay : new long[]{10L, 40L}) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> resync(player), delay);
+        }
+    }
+
+    private void resync(@NotNull Player player) {
+        if (!player.isOnline()) return;
+        NameTagEntity own = plugin.getEntityManager().getNameTagEntity(player);
+        if (own != null) {
+            for (Player viewer : player.getTrackedBy()) reattach(own, viewer);
+        }
+        for (Player other : player.getWorld().getPlayers()) {
+            if (other == player || !other.getTrackedBy().contains(player)) continue;
+            NameTagEntity tag = plugin.getEntityManager().getNameTagEntity(other);
+            if (tag != null) reattach(tag, player);
+        }
+    }
+
+    private void reattach(@NotNull NameTagEntity tag, @NotNull Player viewer) {
+        if (!viewer.isOnline() || !tag.canBeSeenBy(viewer) || PacketEvents.getAPI().getPlayerManager().getUser(viewer) == null) return;
+        tag.updateLocation();
+        tag.getPassenger().removeViewer(viewer.getUniqueId());
+        tag.getPassenger().addViewer(viewer.getUniqueId());
+        tag.sendPassengerPacket(viewer);
     }
 
 //    @EventHandler
@@ -64,6 +99,8 @@ public class EventsListener implements Listener {
     public void onPlayerChangeWorld(@NotNull PlayerChangedWorldEvent event) {
         NameTagEntity nameTagEntity = plugin.getEntityManager().getNameTagEntity(event.getPlayer());
 
+        scheduleResync(event.getPlayer());
+
         if (nameTagEntity == null) return;
 
         nameTagEntity.updateLocation();
@@ -91,6 +128,7 @@ public class EventsListener implements Listener {
 
     @EventHandler
     public void onPlayerRespawn(@NotNull PlayerRespawnEvent event) {
+        scheduleResync(event.getPlayer());
         NameTagEntity nameTagEntity = plugin.getEntityManager()
             .getNameTagEntity(event.getPlayer());
 

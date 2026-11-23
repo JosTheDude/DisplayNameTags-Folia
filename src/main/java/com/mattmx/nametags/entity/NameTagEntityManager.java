@@ -40,6 +40,12 @@ public class NameTagEntityManager {
     };
 
     public @NotNull NameTagEntity getOrCreateNameTagEntity(@NotNull Entity entity) {
+        NameTagEntity stale = nameTagCache.getIfPresent(entity.getUniqueId());
+        if (stale != null && stale.getBukkitEntity().getEntityId() != entity.getEntityId()) {
+            nameTagCache.invalidate(entity.getUniqueId());
+            forget(stale);
+            stale.destroy();
+        }
         NameTagEntity tagEntity = nameTagCache.get(entity.getUniqueId(), uuid -> {
             NameTagEntity newlyCreated = new NameTagEntity(entity);
 
@@ -63,16 +69,27 @@ public class NameTagEntityManager {
 
     public @Nullable NameTagEntity removeEntity(@NotNull Entity entity) {
         lastSentPassengers.remove(entity.getEntityId());
+        final NameTagEntity cached = nameTagCache.getIfPresent(entity.getUniqueId());
         nameTagCache.invalidate(entity.getUniqueId());
 
-        final NameTagEntity removed = nameTagEntityByEntityId.remove(entity.getEntityId());
+        NameTagEntity removed = nameTagEntityByEntityId.remove(entity.getEntityId());
+        if (removed == null) removed = cached;
         if (removed != null) {
-            nameTagEntityByPassengerEntityId.remove(removed.getPassenger().getEntityId());
-        } else {
-            throw new IllegalArgumentException("No cached NameTag by the passenger entity ID, this could be a memory leak.");
+            forget(removed);
+            if (cached != null && cached != removed) {
+                forget(cached);
+                cached.destroy();
+            }
         }
 
         return removed;
+    }
+
+    private void forget(@NotNull NameTagEntity tag) {
+        int ownerId = tag.getBukkitEntity().getEntityId();
+        nameTagEntityByEntityId.remove(ownerId, tag);
+        nameTagEntityByPassengerEntityId.remove(tag.getPassenger().getEntityId(), tag);
+        lastSentPassengers.remove(ownerId);
     }
 
     public @Nullable NameTagEntity getNameTagEntity(@NotNull Entity entity) {
