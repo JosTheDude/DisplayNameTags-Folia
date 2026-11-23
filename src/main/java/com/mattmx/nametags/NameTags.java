@@ -8,6 +8,7 @@ import com.mattmx.nametags.config.TextFormatter;
 import com.mattmx.nametags.entity.NameTagEntityManager;
 import com.mattmx.nametags.hook.NeznamyTABHook;
 import com.mattmx.nametags.hook.SkinRestorerHook;
+import com.mattmx.nametags.hook.VoiceChatHook;
 import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
 import com.mattmx.nametags.utils.test.TestPlaceholderExpansion;
 import me.tofaa.entitylib.APIConfig;
@@ -80,6 +81,7 @@ public class NameTags extends JavaPlugin {
 
         NeznamyTABHook.inject(this);
         SkinRestorerHook.inject(this);
+        VoiceChatHook.inject(this);
 
         Bukkit.getPluginManager().registerEvents(eventsListener, this);
 
@@ -113,6 +115,8 @@ public class NameTags extends JavaPlugin {
             .orElse(TextFormatter.MINI_MESSAGE);
 
         getLogger().info("Using " + formatter.name() + " as text formatter.");
+
+        VoiceChatHook.load(getConfig().getConfigurationSection("voice-chat"));
 
         for (String permissionNode : groups.keySet()) {
             Bukkit.getPluginManager().removePermission(permissionNode);

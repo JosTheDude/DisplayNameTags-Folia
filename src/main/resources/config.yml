@@ -87,6 +87,20 @@ groups:
   staff:
     background: red
 
+# Simple Voice Chat status.
+# Put %nametags_voice% in any tag line to show the player's voice chat state.
+# Works without PlaceholderAPI. Requires Simple Voice Chat on the server;
+# without it every player shows the "disconnected" icon.
+voice-chat:
+  # How long (in milliseconds) after the last voice packet a player counts as speaking.
+  # Keep this above refresh-every or the speaking icon may be missed.
+  speaking-window-ms: 600
+  icons:
+    speaking: "<green>🔊</green>"
+    idle: "<white>🔈</white>"
+    disabled: "<gray>🔇</gray>"
+    disconnected: ""
+
 # Formatting.
 # Select a formatter for your text, default is minimessage.
 # Options:

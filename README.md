@@ -22,6 +22,7 @@ Changes in this fork:
 - **Name tags after teleport, world change, respawn and rejoin:** tags are re-sent to nearby players shortly after these events, so names no longer go missing.
 - **Relog fix:** a stale tag left from a previous session is replaced instead of reused, and leaving the server no longer throws "No cached NameTag" errors.
 - **Less placeholder work:** when a group tag replaces the default text, the default text is no longer parsed on every refresh.
+- **Simple Voice Chat status:** `%nametags_voice%` shows whether a player is speaking, idle, has voice chat disabled or is not connected. Icons are set in the `voice-chat` section of `config.yml`. It does not need PlaceholderAPI.
 
 Licensed under GPL-3.0, the same as the original.
 

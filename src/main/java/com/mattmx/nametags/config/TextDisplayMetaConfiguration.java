@@ -3,6 +3,7 @@ package com.mattmx.nametags.config;
 import com.github.retrooper.packetevents.util.Vector3f;
 import com.mattmx.nametags.NameTags;
 import com.mattmx.nametags.hook.PapiHook;
+import com.mattmx.nametags.hook.VoiceChatHook;
 import me.tofaa.entitylib.meta.display.AbstractDisplayMeta;
 import me.tofaa.entitylib.meta.display.TextDisplayMeta;
 import net.kyori.adventure.text.Component;
@@ -182,7 +183,7 @@ public class TextDisplayMetaConfiguration {
     }
 
     private static Component convertToComponent(Player self, String line) {
-        String formatted = line;
+        String formatted = VoiceChatHook.apply(self.getUniqueId(), line);
 
         formatted = PapiHook.setPlaceholders(self, formatted);
 

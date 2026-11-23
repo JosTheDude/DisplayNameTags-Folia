@@ -23,6 +23,7 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://maven.evokegames.gg/snapshots")
+    maven("https://maven.maxhenkel.de/repository/public")
 
     mavenLocal()
     mavenCentral()
@@ -37,6 +38,7 @@ dependencies {
     compileOnly(libs.tab)
     compileOnly(libs.packetevents)
     compileOnly(libs.skinsrestorer)
+    compileOnly(libs.voicechat)
 
     // Downloaded during runtime
     compileOnly(libs.caffeine)

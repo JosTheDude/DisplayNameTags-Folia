@@ -2,6 +2,7 @@ package com.mattmx.nametags;
 
 import com.mattmx.nametags.entity.NameTagEntity;
 import com.mattmx.nametags.entity.trait.SneakTrait;
+import com.mattmx.nametags.hook.VoiceChatHook;
 import io.github.retrooper.packetevents.util.folia.FoliaScheduler;
 import com.github.retrooper.packetevents.PacketEvents;
 import org.bukkit.Bukkit;
@@ -81,6 +82,7 @@ public class EventsListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
         plugin.getEntityManager().removeLastSentPassengersCache(event.getPlayer().getEntityId());
+        VoiceChatHook.forget(event.getPlayer().getUniqueId());
         // TODO(matt): might not be sending de-spawn packet to viewers all the time?
 
         // Remove as a viewer from all entities
