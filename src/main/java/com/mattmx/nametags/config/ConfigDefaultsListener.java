@@ -62,16 +62,17 @@ public class ConfigDefaultsListener implements Listener {
                 plugin,
                 refreshMillis,
                 (entity) -> {
-                    TextDisplayMetaConfiguration.applyMeta(defaultSection(), entity.getMeta());
-                    TextDisplayMetaConfiguration.applyTextMeta(defaultSection(), entity.getMeta(), player);
-
-                    // TODO we should cache this stuff
                     List<Map.Entry<String, ConfigurationSection>> groups = plugin.getGroups()
                         .entrySet()
                         .stream()
                         .filter((e) -> player.hasPermission(e.getKey()))
                         .sorted(GroupPriorityComparator.get())
                         .toList();
+
+                    TextDisplayMetaConfiguration.applyMeta(defaultSection(), entity.getMeta());
+                    if (groups.isEmpty() || !groups.getLast().getValue().isList("text")) {
+                        TextDisplayMetaConfiguration.applyTextMeta(defaultSection(), entity.getMeta(), player);
+                    }
 
                     long recentRefreshEvery = plugin.getConfig().getLong("defaults.refresh-every", 50);
                     if (!groups.isEmpty()) {
